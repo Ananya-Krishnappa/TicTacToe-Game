@@ -14,6 +14,7 @@ public class TicTacToeGame {
 		drawBoard(board);
 		System.out.println("Select an index between 1 to 9");
 		makeAMove(player1Turn, player1Letter, board);
+
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class TicTacToeGame {
 	 * @param player1Letter
 	 * @param board
 	 */
-	private static void makeAMove(boolean player1Turn, String player1Letter, char[] board) {
+	private static boolean makeAMove(boolean player1Turn, String player1Letter, char[] board) {
 		String player2Letter = player1Letter.equalsIgnoreCase("X") ? "0" : "X";
 		Scanner sc = new Scanner(System.in);
 		if (player1Turn) {
@@ -77,7 +78,24 @@ public class TicTacToeGame {
 				}
 				player1Turn = !player1Turn;
 				drawBoard(board);
-				makeAMove(player1Turn, player1Letter, board);
+				playerHasWon(board);
+				String output = "";
+				if (playerHasWon(board) == 'X') {
+					output = player1Letter.equalsIgnoreCase("X") ? "Player1 won" : "Player2 won";
+					System.out.println(output);
+					return true;
+				} else if (playerHasWon(board) == '0') {
+					output = player1Letter.equalsIgnoreCase("0") ? "Player1 won" : "Player2 won";
+					System.out.println(output);
+					return true;
+				} else {
+					if (!isTie(board)) {
+						makeAMove(player1Turn, player1Letter, board);
+					} else {
+						System.out.println("Game ended in a tie");
+						return true;
+					}
+				}
 
 			} else {
 				System.out.println("This index is already taken. Please choose another index");
@@ -87,6 +105,20 @@ public class TicTacToeGame {
 			System.out.println("Please enter a valid input");
 			makeAMove(player1Turn, player1Letter, board);
 		}
+		return false;
+	}
+
+	/**
+	 * @param board
+	 * @return
+	 */
+	private static boolean isTie(char[] board) {
+		for (int j = 1; j <= 9; j++) {
+			if (board[j] != 'X' && board[j] != '0') {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -114,5 +146,49 @@ public class TicTacToeGame {
 		}
 
 		return player1Turn;
+	}
+
+	private static char playerHasWon(char[] board) {
+		for (int a = 1; a < 9; a++) {
+			String line = null;
+
+			switch (a) {
+			case 1:
+				line = String.valueOf(board[1]) + board[2] + board[3];
+				break;
+			case 2:
+				line = String.valueOf(board[4]) + board[5] + board[6];
+				break;
+			case 3:
+				line = String.valueOf(board[7]) + board[8] + board[9];
+				break;
+			case 4:
+				line = String.valueOf(board[1]) + board[4] + board[7];
+				break;
+			case 5:
+				line = String.valueOf(board[2]) + board[5] + board[8];
+				break;
+			case 6:
+				line = String.valueOf(board[3]) + board[6] + board[9];
+				break;
+			case 7:
+				line = String.valueOf(board[1]) + board[5] + board[9];
+				break;
+			case 8:
+				line = String.valueOf(board[3]) + board[5] + board[7];
+				break;
+			}
+			// For X winner
+			if (line.equals("XXX")) {
+				return 'X';
+			}
+
+			// For O winner
+			else if (line.equals("000")) {
+				return '0';
+			}
+		}
+		return 0;
+
 	}
 }
