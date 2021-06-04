@@ -9,6 +9,7 @@ public class TicTacToeGame {
 		drawBoard(board);
 		String player1 = "";
 		player1 = selectLetter(player1);
+		drawBoard(board);
 	}
 
 	/**
