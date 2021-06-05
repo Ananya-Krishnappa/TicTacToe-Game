@@ -63,6 +63,7 @@ public class TicTacToeGame {
 		String player2Letter = ticTacToeGame.player1Letter.equalsIgnoreCase("X") ? "0" : "X";
 		if (ticTacToeGame.player1Turn) {
 			System.out.println("Player1's turn(" + ticTacToeGame.player1Letter + ")");
+			checkForWinningMove(ticTacToeGame);
 		} else {
 			System.out.println("Player2's turn(" + player2Letter + ")");
 			checkForWinningMove(ticTacToeGame);
@@ -96,8 +97,8 @@ public class TicTacToeGame {
 	}
 
 	/**
-	 * This method is suggesting the player to decide which move to move to win the
-	 * game
+	 * This method is suggesting the player to decide which move to play to win the
+	 * game and for Player1 it is suggesting to block the Player2 index to block
 	 * 
 	 * @param ticTacToeGame
 	 */
@@ -109,14 +110,23 @@ public class TicTacToeGame {
 				|| (board[4] == player2Letter && board[7] == player2Letter)
 				|| (board[5] == player2Letter && board[9] == player2Letter)) {
 			if (isIndexFree(1, board)) {
-				System.out.println("You have winning chance at index 1");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 1. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 1");
+				}
+
 			}
 		}
 
 		if ((board[1] == player2Letter && board[3] == player2Letter)
 				|| (board[5] == player2Letter && board[8] == player2Letter)) {
 			if (isIndexFree(2, board)) {
-				System.out.println("You have winning chance at index 2");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 2. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 2");
+				}
 			}
 		}
 
@@ -124,47 +134,75 @@ public class TicTacToeGame {
 				|| (board[6] == player2Letter && board[9] == player2Letter)
 				|| (board[5] == player2Letter && board[7] == player2Letter)) {
 			if (isIndexFree(3, board)) {
-				System.out.println("You have winning chance at index 3");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 3. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 3");
+				}
 			}
 		}
 
 		if ((board[5] == player2Letter && board[6] == player2Letter)
 				|| (board[1] == player2Letter && board[7] == player2Letter)) {
 			if (isIndexFree(4, board)) {
-				System.out.println("You have winning chance at index 4");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 4. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 4");
+				}
 			}
 		}
 		if ((board[4] == player2Letter && board[6] == player2Letter)
 				|| (board[2] == player2Letter && board[8] == player2Letter)
 				|| (board[9] == player2Letter && board[1] == player2Letter)) {
 			if (isIndexFree(5, board)) {
-				System.out.println("You have winning chance at index 5");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 5. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 5");
+				}
 			}
 		}
 		if ((board[4] == player2Letter && board[5] == player2Letter)
 				|| (board[3] == player2Letter && board[9] == player2Letter)) {
 			if (isIndexFree(6, board)) {
-				System.out.println("You have winning chance at index 6");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 6. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 6");
+				}
 			}
 		}
 		if ((board[1] == player2Letter && board[4] == player2Letter)
 				|| (board[8] == player2Letter && board[9] == player2Letter)
 				|| (board[3] == player2Letter && board[5] == player2Letter)) {
 			if (isIndexFree(7, board)) {
-				System.out.println("You have winning chance at index 7");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 7. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 7");
+				}
 			}
 		}
 		if ((board[7] == player2Letter && board[9] == player2Letter)
 				|| (board[2] == player2Letter && board[5] == player2Letter)) {
 			if (isIndexFree(8, board)) {
-				System.out.println("You have winning chance at index 8");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 8. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 8");
+				}
 			}
 		}
 		if ((board[7] == player2Letter && board[8] == player2Letter)
 				|| (board[3] == player2Letter && board[6] == player2Letter)
 				|| (board[1] == player2Letter && board[5] == player2Letter)) {
 			if (isIndexFree(9, board)) {
-				System.out.println("You have winning chance at index 9");
+				if (ticTacToeGame.player1Turn) {
+					System.out.println("Player2 has have winning chance at index 9. Play to block it");
+				} else {
+					System.out.println("You have winning chance at index 9");
+				}
 			}
 		}
 	}
