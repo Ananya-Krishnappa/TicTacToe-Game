@@ -274,7 +274,8 @@ public class TicTacToeGame {
 	}
 
 	/**
-	 * if neither of players winning the first choice should be taken from corners
+	 * If neither of players winning the first choice should be taken from corners 
+	 * else choose center or the other sides
 	 * @param index
 	 * @param board
 	 * @return
