@@ -8,6 +8,7 @@ public class TicTacToeGame {
 	private String player1Letter = "";
 	private String gameStatusMessage = "";
 	Scanner scanner = new Scanner(System.in);
+	private boolean neitherPlayerHasWinningChance = true;
 
 	public static void main(String[] args) {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
@@ -55,7 +56,7 @@ public class TicTacToeGame {
 
 	/**
 	 * This method is deciding the move to be done
-	 * 
+	 *
 	 * @param ticTacToeGame
 	 * @return
 	 */
@@ -63,10 +64,16 @@ public class TicTacToeGame {
 		String player2Letter = ticTacToeGame.player1Letter.equalsIgnoreCase("X") ? "0" : "X";
 		if (ticTacToeGame.player1Turn) {
 			System.out.println("Player1's turn(" + ticTacToeGame.player1Letter + ")");
-			checkForWinningMove(ticTacToeGame);
+			boolean checkOtherPlayerWinningMove = checkForWinningMove(ticTacToeGame, "player1");
+			if (checkOtherPlayerWinningMove) {
+				checkForWinningMove(ticTacToeGame, "player2");
+			}
+			if (ticTacToeGame.neitherPlayerHasWinningChance) {
+				System.out.println("It is suggested to take available corners");
+			}
 		} else {
 			System.out.println("Player2's turn(" + player2Letter + ")");
-			checkForWinningMove(ticTacToeGame);
+			checkForWinningMove(ticTacToeGame, "player2");
 		}
 		int index = scanner.nextInt();
 		if (index >= 1 && index <= 9) {
@@ -98,113 +105,118 @@ public class TicTacToeGame {
 
 	/**
 	 * This method is suggesting the player to decide which move to play to win the
-	 * game and for Player1 it is suggesting to block the Player2 index to block
+	 * game and for Player1 it is suggesting to block the Player2 index to block and
+	 * if neither are winning take available corner
 	 * 
 	 * @param ticTacToeGame
 	 */
-	private void checkForWinningMove(TicTacToeGame ticTacToeGame) {
+	private boolean checkForWinningMove(TicTacToeGame ticTacToeGame, String player) {
+		boolean checkOtherPlayerWinningMove = false;
+		boolean neitherPlayerHasWinningChance = true;
 		char[] board = ticTacToeGame.board;
 		char player2Letter = ticTacToeGame.player1Letter.equalsIgnoreCase("X") ? '0' : 'X';
-
-		if ((board[2] == player2Letter && board[3] == player2Letter)
-				|| (board[4] == player2Letter && board[7] == player2Letter)
-				|| (board[5] == player2Letter && board[9] == player2Letter)) {
+		char playerLetter = 0;
+		if (ticTacToeGame.player1Turn && player.equalsIgnoreCase("Player1")) {
+			playerLetter = ticTacToeGame.player1Letter.toCharArray()[0];
+		} else if (ticTacToeGame.player1Turn && player.equalsIgnoreCase("Player2")) {
+			playerLetter = player2Letter;
+		} else if (!ticTacToeGame.player1Turn && player.equalsIgnoreCase("Player1")) {
+			playerLetter = ticTacToeGame.player1Letter.toCharArray()[0];
+		} else if (!ticTacToeGame.player1Turn && player.equalsIgnoreCase("Player2")) {
+			playerLetter = player2Letter;
+		}
+		if ((board[2] == playerLetter && board[3] == playerLetter)
+				|| (board[4] == playerLetter && board[7] == playerLetter)
+				|| (board[5] == playerLetter && board[9] == playerLetter)) {
 			if (isIndexFree(1, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 1. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 1");
-				}
-
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 1);
 			}
 		}
 
-		if ((board[1] == player2Letter && board[3] == player2Letter)
-				|| (board[5] == player2Letter && board[8] == player2Letter)) {
+		if ((board[1] == playerLetter && board[3] == playerLetter)
+				|| (board[5] == playerLetter && board[8] == playerLetter)) {
 			if (isIndexFree(2, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 2. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 2");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 2);
 			}
 		}
 
-		if ((board[1] == player2Letter && board[2] == player2Letter)
-				|| (board[6] == player2Letter && board[9] == player2Letter)
-				|| (board[5] == player2Letter && board[7] == player2Letter)) {
+		if ((board[1] == playerLetter && board[2] == playerLetter)
+				|| (board[6] == playerLetter && board[9] == playerLetter)
+				|| (board[5] == playerLetter && board[7] == playerLetter)) {
 			if (isIndexFree(3, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 3. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 3");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 3);
 			}
 		}
 
-		if ((board[5] == player2Letter && board[6] == player2Letter)
-				|| (board[1] == player2Letter && board[7] == player2Letter)) {
+		if ((board[5] == playerLetter && board[6] == playerLetter)
+				|| (board[1] == playerLetter && board[7] == playerLetter)) {
 			if (isIndexFree(4, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 4. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 4");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 4);
 			}
 		}
-		if ((board[4] == player2Letter && board[6] == player2Letter)
-				|| (board[2] == player2Letter && board[8] == player2Letter)
-				|| (board[9] == player2Letter && board[1] == player2Letter)) {
+		if ((board[4] == playerLetter && board[6] == playerLetter)
+				|| (board[2] == playerLetter && board[8] == playerLetter)
+				|| (board[9] == playerLetter && board[1] == playerLetter)) {
 			if (isIndexFree(5, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 5. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 5");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 5);
 			}
 		}
-		if ((board[4] == player2Letter && board[5] == player2Letter)
-				|| (board[3] == player2Letter && board[9] == player2Letter)) {
+		if ((board[4] == playerLetter && board[5] == playerLetter)
+				|| (board[3] == playerLetter && board[9] == playerLetter)) {
 			if (isIndexFree(6, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 6. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 6");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 6);
 			}
 		}
-		if ((board[1] == player2Letter && board[4] == player2Letter)
-				|| (board[8] == player2Letter && board[9] == player2Letter)
-				|| (board[3] == player2Letter && board[5] == player2Letter)) {
+		if ((board[1] == playerLetter && board[4] == playerLetter)
+				|| (board[8] == playerLetter && board[9] == playerLetter)
+				|| (board[3] == playerLetter && board[5] == playerLetter)) {
 			if (isIndexFree(7, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 7. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 7");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 7);
 			}
 		}
-		if ((board[7] == player2Letter && board[9] == player2Letter)
-				|| (board[2] == player2Letter && board[5] == player2Letter)) {
+		if ((board[7] == playerLetter && board[9] == playerLetter)
+				|| (board[2] == playerLetter && board[5] == playerLetter)) {
 			if (isIndexFree(8, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 8. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 8");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 8);
 			}
 		}
-		if ((board[7] == player2Letter && board[8] == player2Letter)
-				|| (board[3] == player2Letter && board[6] == player2Letter)
-				|| (board[1] == player2Letter && board[5] == player2Letter)) {
+		if ((board[7] == playerLetter && board[8] == playerLetter)
+				|| (board[3] == playerLetter && board[6] == playerLetter)
+				|| (board[1] == playerLetter && board[5] == playerLetter)) {
 			if (isIndexFree(9, board)) {
-				if (ticTacToeGame.player1Turn) {
-					System.out.println("Player2 has have winning chance at index 9. Play to block it");
-				} else {
-					System.out.println("You have winning chance at index 9");
-				}
+				neitherPlayerHasWinningChance = false;
+				checkOtherPlayerWinningMove = getWinningChanceMessage(ticTacToeGame.player1Turn, player, 9);
 			}
 		}
+		ticTacToeGame.neitherPlayerHasWinningChance = neitherPlayerHasWinningChance;
+		return checkOtherPlayerWinningMove;
+	}
+
+	/**
+	 * 
+	 * @param player1Turn
+	 * @param player
+	 * @param i
+	 * @return
+	 */
+	private boolean getWinningChanceMessage(boolean player1Turn, String player, int i) {
+		if (player1Turn && player.equalsIgnoreCase("Player1") || !player1Turn && player.equalsIgnoreCase("Player2")) {
+			System.out.println("You have winning chance at index " + i);
+			return false;
+		} else if (player1Turn && player.equalsIgnoreCase("Player2")) {
+			System.out.println("Player2 has winning chance at index " + i + ". Play to block it");
+		} else if (!player1Turn && player.equalsIgnoreCase("Player1")) {
+			System.out.println("Player1 has winning chance at index " + i + ". Play to block it");
+		}
+		return true;
 	}
 
 	/**
