@@ -12,13 +12,7 @@ public class TicTacToeGame {
 
 	public static void main(String[] args) {
 		TicTacToeGame ticTacToeGame = new TicTacToeGame();
-		Scanner scanner = new Scanner(System.in);
-		ticTacToeGame.createBoard(ticTacToeGame);
-		ticTacToeGame.toss(ticTacToeGame);
-		ticTacToeGame.selectLetter(ticTacToeGame);
-		ticTacToeGame.createBoard(ticTacToeGame);
-		System.out.println("Select an index between 1 to 9");
-		ticTacToeGame.makeAMove(ticTacToeGame);
+		ticTacToeGame.playTicTacToeGame(ticTacToeGame);
 	}
 
 	/**
@@ -77,7 +71,7 @@ public class TicTacToeGame {
 		}
 		int index = scanner.nextInt();
 		if (index >= 1 && index <= 9) {
-			if (ticTacToeGame.board[index] != 'X' && ticTacToeGame.board[index] != '0') {
+			if (isIndexFree(index, ticTacToeGame.board)) {
 				if (ticTacToeGame.player1Turn) {
 					ticTacToeGame.board[index] = ticTacToeGame.player1Letter.toCharArray()[0];
 				} else {
@@ -88,7 +82,8 @@ public class TicTacToeGame {
 				boolean gameStatus = checkGameStatus(ticTacToeGame);
 				if (gameStatus) {
 					System.out.println(ticTacToeGame.gameStatusMessage);
-					System.exit(0);
+					System.out.println("Do you want to play again? Y or N");
+					playAgain();
 				} else {
 					makeAMove(ticTacToeGame);
 				}
@@ -101,6 +96,38 @@ public class TicTacToeGame {
 			makeAMove(ticTacToeGame);
 		}
 		return false;
+	}
+
+	/**
+	 * This method is making the game play again
+	 * 
+	 * @param ticTacToeGame
+	 */
+	private void playAgain() {
+		String playAgain = scanner.next();
+		if (playAgain.equalsIgnoreCase("Y") || playAgain.equalsIgnoreCase("N")) {
+			if (playAgain.equalsIgnoreCase("Y")) {
+				TicTacToeGame ticTacToeGame = new TicTacToeGame();
+				playTicTacToeGame(ticTacToeGame);
+			} else {
+				scanner.close();
+				System.exit(0);
+			}
+		} else {
+			System.out.println("Please enter a valid input");
+			playAgain();
+		}
+	}
+
+	private void playTicTacToeGame(TicTacToeGame ticTacToeGame) {
+
+		Scanner scanner = new Scanner(System.in);
+		ticTacToeGame.createBoard(ticTacToeGame);
+		ticTacToeGame.toss(ticTacToeGame);
+		ticTacToeGame.selectLetter(ticTacToeGame);
+		ticTacToeGame.createBoard(ticTacToeGame);
+		System.out.println("Select an index between 1 to 9");
+		ticTacToeGame.makeAMove(ticTacToeGame);
 	}
 
 	/**
@@ -201,6 +228,7 @@ public class TicTacToeGame {
 	}
 
 	/**
+	 * This method is giving us the winning message conditions
 	 * 
 	 * @param player1Turn
 	 * @param player
@@ -274,8 +302,9 @@ public class TicTacToeGame {
 	}
 
 	/**
-	 * If neither of players winning the first choice should be taken from corners 
+	 * If neither of players winning the first choice should be taken from corners
 	 * else choose center or the other sides
+	 * 
 	 * @param index
 	 * @param board
 	 * @return
@@ -284,59 +313,48 @@ public class TicTacToeGame {
 		boolean isPreferredChoiceAvailable = false;
 		if (!isPreferredChoiceAvailable) {
 			String cornerIndexList = "It is suggested to select from corners ";
-			boolean isCornerAvailable = false;
 			if (board[1] == '\u0000') {
 				cornerIndexList = cornerIndexList.concat("1, ");
-				isCornerAvailable = true;
 			}
 			if (board[3] == '\u0000') {
 				cornerIndexList = cornerIndexList.concat("3, ");
-				isCornerAvailable = true;
 			}
 			if (board[7] == '\u0000') {
 				cornerIndexList = cornerIndexList.concat("7, ");
-				isCornerAvailable = true;
 			}
 			if (board[9] == '\u0000') {
 				cornerIndexList = cornerIndexList.concat("9, ");
-				isCornerAvailable = true;
 			}
-			if (isCornerAvailable) {
+			if (board[1] == '\u0000' || board[3] == '\u0000' || board[7] == '\u0000' || board[9] == '\u0000') {
 				System.out.println(cornerIndexList);
-				isPreferredChoiceAvailable = true;
 			} else {
 				System.out.println("Corners not available");
-			}
-		} else if (!isPreferredChoiceAvailable) {
-			if (board[5] == '\u0000') {
-				System.out.println("It is suggested to select the center");
-				isPreferredChoiceAvailable = !isPreferredChoiceAvailable;
-			}
-		} else if (!isPreferredChoiceAvailable) {
-			String availableSides = "It is suggested to select from sides ";
-			boolean isSidesAvailable = false;
-			if (board[2] == '\u0000') {
-				availableSides = availableSides.concat("2, ");
-				isSidesAvailable = true;
-			}
-			if (board[4] == '\u0000') {
-				availableSides = availableSides.concat("4, ");
-				isSidesAvailable = true;
-			}
-			if (board[6] == '\u0000') {
-				availableSides = availableSides.concat("6, ");
-				isSidesAvailable = true;
-			}
-			if (board[8] == '\u0000') {
-				availableSides = availableSides.concat("8, ");
-				isSidesAvailable = true;
-			}
-			if (isSidesAvailable) {
-				System.out.println(availableSides);
-			} else {
-				System.out.println("Sides not available");
-			}
+				isPreferredChoiceAvailable = false;
+				if (!isPreferredChoiceAvailable && board[5] == '\u0000') {
+					System.out.println("It is suggested to select the center");
+					isPreferredChoiceAvailable = true;
+				} else if (!isPreferredChoiceAvailable) {
+					String availableSides = "It is suggested to select from sides ";
+					if (board[2] == '\u0000') {
+						availableSides = availableSides.concat("2, ");
+					}
+					if (board[4] == '\u0000') {
+						availableSides = availableSides.concat("4, ");
+					}
+					if (board[6] == '\u0000') {
+						availableSides = availableSides.concat("6, ");
+					}
+					if (board[8] == '\u0000') {
+						availableSides = availableSides.concat("8, ");
+					}
+					if (board[2] == '\u0000' || board[4] == '\u0000' || board[6] == '\u0000' || board[8] == '\u0000') {
+						System.out.println(availableSides);
+					} else {
+						System.out.println("Sides not available");
+					}
 
+				}
+			}
 		}
 	}
 
