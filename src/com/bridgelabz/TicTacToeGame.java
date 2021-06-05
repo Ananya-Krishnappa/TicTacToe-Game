@@ -69,7 +69,7 @@ public class TicTacToeGame {
 				checkForWinningMove(ticTacToeGame, "player2");
 			}
 			if (ticTacToeGame.neitherPlayerHasWinningChance) {
-				System.out.println("It is suggested to take available corners");
+				getPreferredChoices(ticTacToeGame.board);
 			}
 		} else {
 			System.out.println("Player2's turn(" + player2Letter + ")");
@@ -271,6 +271,72 @@ public class TicTacToeGame {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * if neither of players winning the first choice should be taken from corners
+	 * @param index
+	 * @param board
+	 * @return
+	 */
+	private void getPreferredChoices(char[] board) {
+		boolean isPreferredChoiceAvailable = false;
+		if (!isPreferredChoiceAvailable) {
+			String cornerIndexList = "It is suggested to select from corners ";
+			boolean isCornerAvailable = false;
+			if (board[1] == '\u0000') {
+				cornerIndexList = cornerIndexList.concat("1, ");
+				isCornerAvailable = true;
+			}
+			if (board[3] == '\u0000') {
+				cornerIndexList = cornerIndexList.concat("3, ");
+				isCornerAvailable = true;
+			}
+			if (board[7] == '\u0000') {
+				cornerIndexList = cornerIndexList.concat("7, ");
+				isCornerAvailable = true;
+			}
+			if (board[9] == '\u0000') {
+				cornerIndexList = cornerIndexList.concat("9, ");
+				isCornerAvailable = true;
+			}
+			if (isCornerAvailable) {
+				System.out.println(cornerIndexList);
+				isPreferredChoiceAvailable = true;
+			} else {
+				System.out.println("Corners not available");
+			}
+		} else if (!isPreferredChoiceAvailable) {
+			if (board[5] == '\u0000') {
+				System.out.println("It is suggested to select the center");
+				isPreferredChoiceAvailable = !isPreferredChoiceAvailable;
+			}
+		} else if (!isPreferredChoiceAvailable) {
+			String availableSides = "It is suggested to select from sides ";
+			boolean isSidesAvailable = false;
+			if (board[2] == '\u0000') {
+				availableSides = availableSides.concat("2, ");
+				isSidesAvailable = true;
+			}
+			if (board[4] == '\u0000') {
+				availableSides = availableSides.concat("4, ");
+				isSidesAvailable = true;
+			}
+			if (board[6] == '\u0000') {
+				availableSides = availableSides.concat("6, ");
+				isSidesAvailable = true;
+			}
+			if (board[8] == '\u0000') {
+				availableSides = availableSides.concat("8, ");
+				isSidesAvailable = true;
+			}
+			if (isSidesAvailable) {
+				System.out.println(availableSides);
+			} else {
+				System.out.println("Sides not available");
+			}
+
+		}
 	}
 
 	/**
