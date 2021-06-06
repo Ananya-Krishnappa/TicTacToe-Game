@@ -39,9 +39,9 @@ public class TicTacToeGame {
 		System.out.print(player + " to select a letter X or 0 ");
 		String p1 = scanner.nextLine();
 		if (p1.equalsIgnoreCase("X")) {
-			player1Letter = ticTacToeGame.player1Turn ? p1.toUpperCase() : "0";
+			ticTacToeGame.player1Letter = ticTacToeGame.player1Turn ? p1.toUpperCase() : "0";
 		} else if (p1.equalsIgnoreCase("0")) {
-			player1Letter = ticTacToeGame.player1Turn ? p1.toUpperCase() : "X";
+			ticTacToeGame.player1Letter = ticTacToeGame.player1Turn ? p1.toUpperCase() : "X";
 		} else {
 			System.out.println("Please select a valid value");
 			selectLetter(ticTacToeGame);
@@ -49,26 +49,16 @@ public class TicTacToeGame {
 	}
 
 	/**
-	 * This method is deciding the move to be done
-	 *
+	 * This method is deciding the move to be done Derive player and player2Letter.
+	 * Algorithm for smart moves. Make the move if index is free. Update the board.
+	 * Check game status.
+	 * 
 	 * @param ticTacToeGame
 	 * @return
 	 */
 	private boolean makeAMove(TicTacToeGame ticTacToeGame) {
 		String player2Letter = ticTacToeGame.player1Letter.equalsIgnoreCase("X") ? "0" : "X";
-		if (ticTacToeGame.player1Turn) {
-			System.out.println("Player1's turn(" + ticTacToeGame.player1Letter + ")");
-			boolean checkOtherPlayerWinningMove = checkForWinningMove(ticTacToeGame, "player1");
-			if (checkOtherPlayerWinningMove) {
-				checkForWinningMove(ticTacToeGame, "player2");
-			}
-			if (ticTacToeGame.neitherPlayerHasWinningChance) {
-				getPreferredChoices(ticTacToeGame.board);
-			}
-		} else {
-			System.out.println("Player2's turn(" + player2Letter + ")");
-			checkForWinningMove(ticTacToeGame, "player2");
-		}
+		algorithmForSmartPlay(ticTacToeGame, player2Letter);
 		int index = scanner.nextInt();
 		if (index >= 1 && index <= 9) {
 			if (isIndexFree(index, ticTacToeGame.board)) {
@@ -96,6 +86,33 @@ public class TicTacToeGame {
 			makeAMove(ticTacToeGame);
 		}
 		return false;
+	}
+
+	/**
+	 * This method is to look for intelligent moves. If player1 is playing, he
+	 * checks if he has a winning move, if not he checks if the other player has
+	 * winning move and play to block it, if neither of them has a winning move,
+	 * player1 to look for best moves available. Look for corners first,then the
+	 * center,then the sides. If player2 is playing,he checks if he has a winning
+	 * move.
+	 * 
+	 * @param ticTacToeGame
+	 * @param player2Letter
+	 */
+	private void algorithmForSmartPlay(TicTacToeGame ticTacToeGame, String player2Letter) {
+		if (ticTacToeGame.player1Turn) {
+			System.out.println("Player1's turn(" + ticTacToeGame.player1Letter + ")");
+			boolean checkOtherPlayerWinningMove = checkForWinningMove(ticTacToeGame, "player1");
+			if (checkOtherPlayerWinningMove) {
+				checkForWinningMove(ticTacToeGame, "player2");
+			}
+			if (ticTacToeGame.neitherPlayerHasWinningChance) {
+				getBestMovesAvailable(ticTacToeGame.board);
+			}
+		} else {
+			System.out.println("Player2's turn(" + player2Letter + ")");
+			checkForWinningMove(ticTacToeGame, "player2");
+		}
 	}
 
 	/**
@@ -309,7 +326,7 @@ public class TicTacToeGame {
 	 * @param board
 	 * @return
 	 */
-	private void getPreferredChoices(char[] board) {
+	private void getBestMovesAvailable(char[] board) {
 		boolean isPreferredChoiceAvailable = false;
 		if (!isPreferredChoiceAvailable) {
 			String cornerIndexList = "It is suggested to select from corners ";
